@@ -1,0 +1,4 @@
+split,roc_auc,accuracy,n_test
+Random,0.9737,0.9188,234
+Scaffold,0.9652,0.924,250
+Temporal,0.8898,0.5598,234
