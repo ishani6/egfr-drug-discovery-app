@@ -1,7 +1,6 @@
-pandas
-numpy
-scikit-learn
-joblib
-rdkit-pypi
-chembl-webresource-client
-gradio
+pandas==2.2.2
+numpy==1.26.4
+scikit-learn==1.5.1
+joblib==1.4.2
+gradio==4.44.1
+chembl-webresource-client==0.10.9
