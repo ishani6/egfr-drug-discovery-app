@@ -22,12 +22,14 @@ df.columns = [c.strip().lower() for c in df.columns]
 if "pic50" not in df.columns:
     raise ValueError("Training data must contain a pic50 column")
 
-base_cols = [c for c in [
-    "molwt", "logp", "tpsa", "hba", "hbd",
-    "rotatablebonds", "ringcount", "fractioncsp3"
-] if c in df.columns]
+base_cols = [
+    c for c in [
+        "mol_wt", "logp", "tpsa", "hba", "hbd",
+        "rotatable_bonds", "ring_count", "fraction_csp3"
+    ] if c in df.columns
+]
 
-fp_cols = [c for c in df.columns if c.startswith(("morgan", "maccs", "fp_"))]
+fp_cols = [c for c in df.columns if c.startswith(("morgan_", "maccs", "fp_"))]
 feature_cols = base_cols + fp_cols
 
 if not feature_cols:
@@ -45,16 +47,19 @@ X_train_r, X_test_r, y_train_r, y_test_r = train_test_split(
     X, y_reg, test_size=0.2, random_state=42
 )
 
-X_train_c, X_test_c, y_train_c, y_test_c = train_test_split(
-    X, y_clf, test_size=0.2, random_state=42, stratify=y_clf
-)
-
 activity_model = RandomForestRegressor(
     n_estimators=300, random_state=42, n_jobs=-1
 )
 activity_model.fit(X_train_r, y_train_r)
 print("Activity MAE:", mean_absolute_error(y_test_r, activity_model.predict(X_test_r)))
 joblib.dump(activity_model, out_activity)
+
+if y_clf.nunique() < 2:
+    raise ValueError("Binary target has only one class; cannot train classifier")
+
+X_train_c, X_test_c, y_train_c, y_test_c = train_test_split(
+    X, y_clf, test_size=0.2, random_state=42, stratify=y_clf
+)
 
 admet_model = RandomForestClassifier(
     n_estimators=300, random_state=42, n_jobs=-1
