@@ -15,5 +15,5 @@ streamlit run app.py
 ```
 
 ## Deploy
-Push these files to GitHub and deploy on Streamlit Community Cloud.
+Deploy on Streamlit Community Cloud.
 Upload your Colab CSV outputs through the UI or place them in a `data/` folder.
