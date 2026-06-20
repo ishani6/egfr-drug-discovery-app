@@ -1,0 +1,7 @@
+gradio
+pandas
+numpy
+joblib
+chembl_webresource_client
+rdkit-pypi
+scikit-learn
