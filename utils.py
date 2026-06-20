@@ -88,7 +88,7 @@ def build_feature_table(df, n_bits=2048):
     out = df.copy()
     desc = out["clean_smiles"].apply(calculate_rdkit_descriptors).reset_index(drop=True)
     fps = out["clean_smiles"].apply(lambda s: generate_morgan_fingerprint(s, n_bits=n_bits))
-    fp_df = pd.DataFrame(fps.tolist(), columns=[f"morgan{i}" for i in range(n_bits)])
+    fp_df = pd.DataFrame(fps.tolist(), columns=[f"morgan_{i}" for i in range(n_bits)])
     return pd.concat([out.reset_index(drop=True), desc, fp_df], axis=1)
 
 
@@ -108,7 +108,7 @@ def load_prediction_model(path):
 
 def get_model_feature_columns(df, model, base_cols=None):
     if base_cols is None:
-        base_cols = ["molwt", "logp", "tpsa", "hba", "hbd", "rotatablebonds", "ringcount", "fractioncsp3"]
+        base_cols = ["mol_wt", "logp", "tpsa", "hba", "hbd", "rotatable_bonds", "ring_count", "fraction_csp3"]
     fp_cols = [c for c in df.columns if c.startswith("morgan") or c.startswith("maccs") or c.startswith("fp_")]
     cols = base_cols + fp_cols
     if hasattr(model, "feature_names_in_"):
