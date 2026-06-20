@@ -1,7 +1,7 @@
-gradio
 pandas
 numpy
-joblib
-chembl_webresource_client
-rdkit-pypi
 scikit-learn
+joblib
+rdkit-pypi
+chembl-webresource-client
+gradio
