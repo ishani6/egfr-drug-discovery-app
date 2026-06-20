@@ -121,9 +121,9 @@ def rank_molecules(admet_df):
 def load_generated():
     gen = load_csv_if_exists(GEN_PATH)
     opt = load_csv_if_exists(OPT_PATH)
-    gen = normalize_columns(gen) if gen is not None else None
-    opt = normalize_columns(opt) if opt is not None else None
-    if gen is None and opt is None:
+    gen = normalize_columns(gen) if gen is not None else pd.DataFrame()
+    opt = normalize_columns(opt) if opt is not None else pd.DataFrame()
+    if gen.empty and opt.empty:
         return None, None, "No generated/optimized CSV files found."
     return gen, opt, "Loaded generated and optimized molecule tables."
 
@@ -175,6 +175,6 @@ with gr.Blocks(title="EGFR Drug Discovery Pipeline") as demo:
     btn_act.click(predict_activity, [feature_state], [activity_state, status]).then(lambda df: df, activity_state, activity_table)
     btn_admet.click(predict_admet, [activity_state], [admet_state, status]).then(lambda df: df, admet_state, admet_table)
     btn_rank.click(rank_molecules, [admet_state], [ranked_state, status]).then(lambda df: df, ranked_state, ranked_table)
-    btn_gen.click(load_generated, [], [gen_state, opt_state, status]).then(lambda x: x[0], gen_state, generated_table).then(lambda x: x[0] if isinstance(x, tuple) else x, opt_state, optimized_table)
+    btn_gen.click(load_generated, [], [generated_table, optimized_table, status])
 
 demo.launch(server_name="0.0.0.0", server_port=7860)
